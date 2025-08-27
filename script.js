@@ -5,6 +5,7 @@ const canvas = document.getElementById('xyCanvas');
 const ctx = canvas.getContext('2d');
 const zSlider = document.getElementById('zSlider');
 const zValue = document.getElementById('zValue');
+const loopCheckbox = document.getElementById('loopCheckbox');
 
 let audioContext;
 let source;
@@ -48,6 +49,12 @@ zSlider.addEventListener('input', () => {
   updatePosition();
 });
 
+loopCheckbox.addEventListener('change', () => {
+  if (source) {
+    source.loop = loopCheckbox.checked;
+  }
+});
+
 audioFileInput.addEventListener('change', async () => {
   if (!audioFileInput.files.length) return;
   const file = audioFileInput.files[0];
@@ -72,6 +79,7 @@ playButton.addEventListener('click', () => {
   }
   source = audioContext.createBufferSource();
   source.buffer = audioBuffer;
+  source.loop = loopCheckbox.checked;
   panner = audioContext.createPanner();
   panner.panningModel = 'HRTF';
   panner.distanceModel = 'inverse';
